@@ -61,8 +61,18 @@ void transpose(int*** a, int* n, int* m)
 	*a = b;
 }
 
-void func(int a = 1, int b = 5)
-{
+int** sum_of_mx(int*** a; int*** b; int* n; int* m) {
+	int** c = new int* [*n];
+	for (int i = 0; i < n; i++) {
+		c[i] = new int[*m];
+		for (int j = 0; j < m; j++) {
+			c[i][j] += (*a)[i][j] + (*b)[i][j];
+		}
+	}
+	return c;
+}
+
+void func(int a = 1, int b = 5){
 	cout << a + b;
 }
 
