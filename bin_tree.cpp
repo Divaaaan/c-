@@ -45,13 +45,13 @@ struct node {
 			if (this->left == NULL) {
 				return NULL;
 			}
-			this->left->find(value);
+			return this->left->find(value);
 		}
 		if (this->value < value) {
 			if (this->rigth == NULL) {
 				return NULL;
 			}
-			this->rigth->find(value);
+			return this->rigth->find(value);
 		}
 	}
 	node* remove() {
@@ -111,5 +111,28 @@ struct node {
 
 
 int main(){
-	
+	node* n = new node(5);
+	n->add(10);
+	n->add(7);
+	n->add(3);
+	n->find(10)->remove();
+	n->find(3)->remove();
+	if (n->find(5) == n) {
+		n = n->find(5)->remove();
+	}
+	else {
+		n->find(5)->remove();
+	}
+	if (n->find(7) == n) {
+		n = n->find(7)->remove();
+	}
+	else {
+		n->find(7)->remove();
+	}
+	/*cout << (n->find(7) != NULL);
+	cout << (n->find(10) != NULL);
+	cout << (n->find(5) != NULL);
+	cout << (n->find(3) != NULL);
+	cout << (n->find(1) != NULL);
+	cout << (n->find(10) != NULL);*/
 }
