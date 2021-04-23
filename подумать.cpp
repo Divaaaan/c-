@@ -1,102 +1,55 @@
 #include <iostream>
 #include <vector>
-#include <string>
-#include <algorithm>
-#include <set>
-#include <deque>
 
 using namespace std;
 
 int n;
-vector <int> s;
+vector<int> v;
+vector<vector<pair<int, int>>> dp[2];
 
-pair <int, int> solve(int l, int r) {
-	// l = r.
-	bool f; // 1 - первый, 0 - второй
-	int first = 0, sec = 0;
-	if (n % 2) {
-		sec += s[l];
-		if (l != 0)
-			l--;
-		if (r != s.size() - 1)
-			r++;
-		f = 0;
+pair<int, int> rec(int l, int r, int p)
+{
+	pair<int, int> ans;
+	if (dp[p][l][r].first != -1)
+		return dp[p][l][r];
+	if (l == r)
+	{
+		if (p == 0)
+			ans = { v[l], 0 };
+		else
+			ans = { 0, v[l] };
+		dp[p][l][r] = ans;
+		return ans;
 	}
-	else {
-		first += s[l];
-		sec += s[l];
-		if (l != 0)
-			l--;
-		if (r != s.size() - 1)
-			r++;
-		f = 1;
-	}
-	while (l != 0 && r != n - 1) {
-		if (f) {
-			int mx;
-			if (s[r] > s[l] && r != n - 1) {
-				first += s[r];
-				r++;
-			}
-			else {
-				if (l != 0) {
-					first += s[l];
-					l--;
-				}
-			}
-		}
-		else {
-			int mx;
-			if (s[r] > s[l] && r != n - 1) {
-				sec += s[r];
-				r++;
-			}
-			else {
-				if (l != 0) {
-					sec += s[l];
-					l--;
-				}
-			}
-		}
-	}
-	if (first > sec) {
-		return  { 1, first };
-	}
-	else {
-		return { 2, sec };
-	}
+	auto vl = rec(l + 1, r, (p + 1) % 2);	
+	auto vr = rec(l, r - 1, (p + 1) % 2);
+	if (p == 0)
+		if (v[l] + vl.first > v[r] + vr.first)
+			ans = { v[l] + vl.first, vl.second };
+		else
+			ans = { v[r] + vr.first, vr.second };
+	else
+		if (v[l] + vl.second > v[r] + vr.second)
+			ans = {vl.first, v[l] + vl.second };
+		else
+			ans = { vr.first, v[r] + vr.second };
+	dp[p][l][r] = ans;
+	return ans;
 }
 
-int main() {
-	int mx_1 = 0, mx_2 = 0;
+int main()
+{
 	cin >> n;
-	s.resize(n);
+	v.resize(n);
 	for (int i = 0; i < n; i++)
-	{
-		cin >> s[i];
-	}
-
-	for (int i = 0; i < n; i++)
-	{
-		pair <int, int> a;
-		a = solve(i, i);
-		if (a.first == 1) {
-			mx_1 = max(mx_1, a.second);
-		}
-		else {
-			mx_2 = max(mx_2, a.second);
-		}
-	}
-	if (mx_1 == mx_2) {
+		cin >> v[i];
+	dp[0].resize(n, vector<pair<int, int>>(n, {-1, -1}));
+	dp[1].resize(n, vector<pair<int, int>>(n, {-1, -1 }));
+	auto e = rec(0, n - 1, 0);
+	if (e.first > e.second)
+		cout << 1;
+	else if (e.first == e.second)
 		cout << 0;
-	}
 	else
-	{
-		if (mx_1 > mx_2) {
-			cout << 1 << ' ' << mx_1;
-		}
-		else {
-			cout << 2 << ' ' << mx_2;
-		}
-	}
+		cout << 2;
 }
