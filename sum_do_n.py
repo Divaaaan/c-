@@ -14,3 +14,4 @@ for i in range(1, a + 1):
                 if j < dig[i - 1]:
                     dp[i][j][0] += dp[i - 1][j - d][1]
 print(dp[a][s][0] + dp[a][s][1])
+
