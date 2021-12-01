@@ -1,3 +1,4 @@
+#кол-во чисел до n с суммой цифр равное s
 n = int(input())
 s = int(input())
 a = len(str(n))
